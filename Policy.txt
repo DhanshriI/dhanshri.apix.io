@@ -1,0 +1,22 @@
+function isIPInRange(ip, cidr) {
+    const ipParts = ip.split('.').map(Number);
+    const [range, prefix] = cidr.split('/');
+
+    const rangeParts = range.split('.').map(Number);
+    const mask = (-1 << (32 - prefix)) >>> 0;
+
+    const ipValue = (ipParts[0] << 24) | (ipParts[1] << 16) | (ipParts[2] << 8) | ipParts[3];
+    const rangeValue = (rangeParts[0] << 24) | (rangeParts[1] << 16) | (rangeParts[2] << 8) | rangeParts[3];
+
+    return (ipValue & mask) === (rangeValue & mask);
+}
+
+// Example usage:
+const ipToCheck = "192.168.1.10";
+const cidrRange = "192.168.1.0/24";
+
+if (isIPInRange(ipToCheck, cidrRange)) {
+    console.log(`${ipToCheck} is in the CIDR range ${cidrRange}`);
+} else {
+    console.log(`${ipToCheck} is NOT in the CIDR range ${cidrRange}`);
+}
